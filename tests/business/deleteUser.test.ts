@@ -27,4 +27,26 @@ describe("Testando deleteUser", () => {
       message: "Deleção realizada com sucesso"
     })
   })
+  test("deve retornar erro se não recebe token",()=>{
+   expect.assertions(1)
+    try {
+      const input = DeleteUserSchema.parse({
+        idToDelete: "id-mock-fulano",
+        token: undefined
+      })  
+    } catch (error) {
+      if(error instanceof ZodError){
+        console.log(error.issues);
+        expect(error.issues).toEqual([
+          {
+          code: "invalid_type",
+          expected: "string",
+          received: "undefined",
+          path: ["token"],
+          message: "Required"
+        }
+      ])
+      }
+    }
+  })
 })
