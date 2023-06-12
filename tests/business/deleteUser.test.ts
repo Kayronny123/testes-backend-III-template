@@ -49,4 +49,19 @@ describe("Testando deleteUser", () => {
       }
     }
   })
+  test("Retornar error se id for de outro usuario", async()=>{
+    expect.assertions(1)  
+    try {
+      const input = DeleteUserSchema.parse({
+        idToDelete: "id-mock-fulano",
+        token: "token-mock-astrodev"
+      });
+      const output = await userBusiness.deleteUser(input);
+    } catch (error) {
+      if(error instanceof BadRequestError){
+        expect(error.message).toBe("somente quem criou a conta pode deletá-la");
+      };
+    }
+  })
+  
 })
